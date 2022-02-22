@@ -21,7 +21,7 @@ sealed class IndicatorStyle {
     @DpValue
     abstract val spacing: Int
     abstract val size: IndicatorSize
-    open val unselectedIndicatorAlpha: Float = 1f
+    abstract val unselectedIndicatorAlpha: Float
 
     /**
      *  Styling option that uses vector drawables provided by integrators
@@ -41,7 +41,7 @@ sealed class IndicatorStyle {
         override val spacing: Int,
         override val size: IndicatorSize,
         @FloatRange(from = 0.01, to = 1.0)
-        override val unselectedIndicatorAlpha: Float
+        override val unselectedIndicatorAlpha: Float = 1f
     ) : IndicatorStyle()
 
     /**
@@ -67,6 +67,6 @@ sealed class IndicatorStyle {
         override val spacing: Int,
         override val size: IndicatorSize,
         @FloatRange(from = 0.01, to = 1.0)
-        override val unselectedIndicatorAlpha: Float
+        override val unselectedIndicatorAlpha: Float = 0.75f
     ) : IndicatorStyle()
 }

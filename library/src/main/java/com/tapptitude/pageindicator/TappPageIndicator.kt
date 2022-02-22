@@ -4,8 +4,8 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.tapptitude.pageindicator.adapter.TappPageIndicatorAdapter
 import com.tapptitude.pageindicator.indicator.IndicatorStyle
 
 class TappPageIndicator @JvmOverloads constructor(
@@ -17,12 +17,11 @@ class TappPageIndicator @JvmOverloads constructor(
     @Orientation
     private var orientation: Int = VERTICAL
 
-    private lateinit var pageIndicatorAdapter: ListAdapter<*, *>
+    private val pageIndicatorAdapter by lazy { TappPageIndicatorAdapter() }
     /** TBD:
-     * private val pageIndicatorAdapter = PageIndicatorAdapter()
      *
-     * The viewHolders of this adapter will have a simple layout containing a ShapeableImageView
-     * The items will be data classes describing how ShapeableImageView looks (background, corners, sizing etc.)
+     * The viewHolders of this adapter will have a simple layout containing an ImageView
+     * The items will be data classes describing how ImageView looks (background, corners, sizing etc.)
      * By default all viewHolders will appear unselected
      * A ViewHolder's view will be changed through the layoutManager's getChildAt(index) callback, see [getViewAtPosition]
      */
