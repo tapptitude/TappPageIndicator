@@ -15,7 +15,7 @@ class TappPageIndicator @JvmOverloads constructor(
 ) : RecyclerView(context, attrs, defStyleAttr) {
 
     @Orientation
-    private var orientation: Int = VERTICAL
+    private var orientation: Int = HORIZONTAL
 
     private val pageIndicatorAdapter by lazy { TappPageIndicatorAdapter() }
     /** TBD:
@@ -43,11 +43,11 @@ class TappPageIndicator @JvmOverloads constructor(
      * Styling set through this method or [setIndicatorStyle] & [setIndicatorSizing] will override xml attributes accordingly
      */
     fun initPageIndicator(
-        @Orientation
-        orientation: Int = VERTICAL,
-        isInfinitelyScrollable: Boolean = false,
         indicatorStyle: IndicatorStyle,
-        pageIndicatorSizing: TappPageIndicatorSizing
+        pageIndicatorSizing: TappPageIndicatorSizing,
+        @Orientation
+        orientation: Int = HORIZONTAL,
+        isInfinitelyScrollable: Boolean = false
     ) = Unit
 
     /**
