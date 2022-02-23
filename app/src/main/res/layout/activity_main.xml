@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:background="@color/white"
     tools:context=".MainActivity">
 
@@ -33,6 +34,19 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/pageIndicator"
         tools:ignore="HardcodedText" />
+
+    <ImageButton
+        android:id="@+id/rotateIndicatorBtn"
+        style="?actionButtonStyle"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_rotate"
+        app:layout_constraintBottom_toBottomOf="@id/previousBtn"
+        app:layout_constraintEnd_toStartOf="@id/nextBtn"
+        app:layout_constraintStart_toEndOf="@id/previousBtn"
+        app:layout_constraintTop_toTopOf="@id/previousBtn"
+        app:tint="@color/black"
+        tools:ignore="ContentDescription" />
 
     <Button
         android:id="@+id/nextBtn"

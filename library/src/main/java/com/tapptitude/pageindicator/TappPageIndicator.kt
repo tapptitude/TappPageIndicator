@@ -24,7 +24,8 @@ class TappPageIndicator @JvmOverloads constructor(
 ) : RecyclerView(context, attrs, defStyleAttr) {
 
     @Orientation
-    private var orientation: Int = HORIZONTAL
+    var orientation: Int = HORIZONTAL
+        private set
 
     private val pageIndicatorAdapter by lazy { TappPageIndicatorAdapter() }
     /**
@@ -104,7 +105,7 @@ class TappPageIndicator @JvmOverloads constructor(
 
     private fun removeExistingSpacingDecoration() {
         if (itemDecorationCount > 0) {
-            (0..itemDecorationCount).forEach { decorationIndex ->
+            (0 until itemDecorationCount).forEach { decorationIndex ->
                 val decoration = getItemDecorationAt(decorationIndex)
                 if (decoration is IndicatorSpacingDecoration) {
                     removeItemDecoration(decoration)
@@ -114,9 +115,12 @@ class TappPageIndicator @JvmOverloads constructor(
     }
 
     //TODO: Check if UI is updated accordingly
-    private fun setOrientation(@Orientation orientation: Int) {
+    fun setOrientation(@Orientation orientation: Int) {
         this.orientation = orientation
         layoutManager = LinearLayoutManager(context, orientation, false)
+        doOnLayout {
+            updateIndicatorViewHolderState(currentPage, true)
+        }
     }
 
     private fun placeIndicators(
@@ -124,7 +128,7 @@ class TappPageIndicator @JvmOverloads constructor(
         @IntRange(from = 0) selectedPosition: Int = 0
     ) {
         val indicatorsList = mutableListOf<IndicatorData>().apply {
-            (0..indicatorsCount).forEach { index ->
+            (0 until indicatorsCount).forEach { index ->
                 add(IndicatorData(index, indicatorStyle))
             }
         }
