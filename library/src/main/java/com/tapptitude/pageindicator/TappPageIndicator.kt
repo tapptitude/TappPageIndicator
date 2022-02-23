@@ -51,6 +51,7 @@ class TappPageIndicator @JvmOverloads constructor(
     var currentPage: Int = 0
         private set
 
+    //TODO: When extracting attrs, map pageIndicatorOrientation enum values to @RecyclerView.Orientation equivalents
     init {
         adapter = pageIndicatorAdapter
     }
@@ -187,13 +188,15 @@ class TappPageIndicator @JvmOverloads constructor(
     companion object {
 
         private val defaultIndicatorStyle: IndicatorStyle by lazy { initDefaultIndicatorStyle() }
+        private const val DEFAULT_INDICATOR_CORNER_RADIUS: Int = 8
+        private const val DEFAULT_INDICATOR_SIZE: Int = 12
 
         private fun initDefaultIndicatorStyle(): IndicatorStyle =
             IndicatorStyle.ShapeIndicator(
-                8,
+                DEFAULT_INDICATOR_CORNER_RADIUS,
                 Color.LTGRAY,
                 Color.LTGRAY,
-                IndicatorSize(12, 12)
+                IndicatorSize(DEFAULT_INDICATOR_SIZE, DEFAULT_INDICATOR_SIZE)
             )
     }
 }

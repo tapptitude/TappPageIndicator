@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
 
-        binding.pageIndicator.initPageIndicator(7, indicatorSpacing = 12)
+        binding.pageIndicator.initPageIndicator(DEFAULT_INDICATORS_COUNT, indicatorSpacing = DEFAULT_INDICATOR_SPACING)
 
         binding.previousBtn.setOnClickListener {
             binding.pageIndicator.previous()
@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
             binding.pageIndicator.next()
         }
 
+        // TODO: The goal in the end is to be able to set any property without manually having to set any dependant ones from outside library code
         binding.rotateIndicatorBtn.setOnClickListener {
             val currentOrientation = binding.pageIndicator.orientation
 
@@ -33,7 +34,12 @@ class MainActivity : AppCompatActivity() {
             } else {
                 binding.pageIndicator.setOrientation(HORIZONTAL)
             }
-            binding.pageIndicator.setIndicatorSpacing(12)
+            binding.pageIndicator.setIndicatorSpacing(DEFAULT_INDICATOR_SPACING)
         }
+    }
+
+    companion object {
+        private const val DEFAULT_INDICATORS_COUNT = 7
+        private const val DEFAULT_INDICATOR_SPACING = 12
     }
 }

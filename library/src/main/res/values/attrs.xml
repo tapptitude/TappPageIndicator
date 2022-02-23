@@ -2,10 +2,16 @@
 <resources>
     <declare-styleable name="TappPageIndicator">
         <!--
-                Will be the equivalent of LinearLayout.HORIZONTAL = 0 or LinearLayout.VERTICAL = 1
+                These are the equivalent of LinearLayout.HORIZONTAL = 0 or LinearLayout.VERTICAL = 1
             which are also used for RecyclerView
+            TODO: When extracting attrs, map pageIndicatorOrientation enum values
+                to @RecyclerView.Orientation equivalents
         -->
-        <attr name="pageIndicatorOrientation" format="integer" />
+        <attr name="pageIndicatorOrientation" format="enum">
+            <enum name="horizontal" value="0" />
+            <enum name="vertical" value="1" />
+        </attr>
+
         <attr name="indicatorSizingMethod" format="enum">
             <enum name="fitAll" value="0" />
             <enum name="fixedNumberOfVisibleIndicators" value="1" />
