@@ -71,8 +71,8 @@ class TappPageIndicator @JvmOverloads constructor(
     ) {
         setIndicatorStyle(indicatorStyle)
         setIndicatorSizing(pageIndicatorSizing)
-        setIndicatorSpacing(indicatorSpacing)
         setOrientation(orientation)
+        setIndicatorSpacing(indicatorSpacing)
         this.isInfinitelyScrollable = isInfinitelyScrollable
         placeIndicators(indicatorsCount)
     }
