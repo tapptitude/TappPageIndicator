@@ -6,4 +6,5 @@
     android:src="#000"
     tools:ignore="ContentDescription"
     tools:layout_height="16dp"
+    tools:layout_margin="4dp"
     tools:layout_width="16dp" />

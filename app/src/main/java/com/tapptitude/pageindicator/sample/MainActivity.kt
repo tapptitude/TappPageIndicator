@@ -12,5 +12,15 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        binding.pageIndicator.initPageIndicator(7, indicatorSpacing = 12)
+
+        binding.previousBtn.setOnClickListener {
+            binding.pageIndicator.previous()
+        }
+
+        binding.nextBtn.setOnClickListener {
+            binding.pageIndicator.next()
+        }
     }
 }

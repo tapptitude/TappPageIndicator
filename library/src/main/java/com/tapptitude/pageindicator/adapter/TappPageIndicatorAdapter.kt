@@ -10,7 +10,7 @@ import com.tapptitude.pageindicator.util.layoutInflater
 class TappPageIndicatorAdapter : ListAdapter<IndicatorData, IndicatorViewHolder>(indicatorsDiffUtil) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): IndicatorViewHolder =
-        IndicatorViewHolder(parent.layoutInflater.inflate(R.layout.item_indicator, parent) as ImageView)
+        IndicatorViewHolder(parent.layoutInflater.inflate(R.layout.item_indicator, parent, false) as ImageView)
 
     override fun onBindViewHolder(holder: IndicatorViewHolder, position: Int) = holder.bind(getItem(position))
 

@@ -1,15 +1,13 @@
 package com.tapptitude.pageindicator.indicator
 
-import android.graphics.Color
 import android.graphics.drawable.Drawable
+import androidx.annotation.ColorInt
 import androidx.annotation.FloatRange
 import com.tapptitude.pageindicator.util.DpValue
 import androidx.annotation.IntRange
 
 /**
  *  Defines the style of the indicators
- *
- *  [spacing] represents the space between 2 indicators, set as ItemDecoration
  *
  *  [size] represents the size of an indicator width & height
  *
@@ -18,8 +16,6 @@ import androidx.annotation.IntRange
  */
 sealed class IndicatorStyle {
 
-    @DpValue
-    abstract val spacing: Int
     abstract val size: IndicatorSize
     abstract val unselectedIndicatorAlpha: Float
 
@@ -36,9 +32,6 @@ sealed class IndicatorStyle {
     data class DrawableIndicator(
         val selectedDrawable: Drawable,
         val unselectedDrawable: Drawable,
-        @DpValue
-        @IntRange(from = 0)
-        override val spacing: Int,
         override val size: IndicatorSize,
         @FloatRange(from = 0.01, to = 1.0)
         override val unselectedIndicatorAlpha: Float = 1f
@@ -60,13 +53,12 @@ sealed class IndicatorStyle {
         @DpValue
         @IntRange(from = 0)
         val cornerRadius: Int,
-        val selectedColor: Color,
-        val unselectedColor: Color,
-        @DpValue
-        @IntRange(from = 0)
-        override val spacing: Int,
+        @ColorInt
+        val selectedColor: Int,
+        @ColorInt
+        val unselectedColor: Int,
         override val size: IndicatorSize,
         @FloatRange(from = 0.01, to = 1.0)
-        override val unselectedIndicatorAlpha: Float = 0.75f
+        override val unselectedIndicatorAlpha: Float = 0.5f
     ) : IndicatorStyle()
 }

@@ -1,12 +1,21 @@
 package com.tapptitude.pageindicator
 
 import android.content.Context
+import android.graphics.Color
 import android.util.AttributeSet
 import android.view.View
+import androidx.annotation.IntRange
+import androidx.core.view.doOnLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.tapptitude.pageindicator.adapter.IndicatorData
+import com.tapptitude.pageindicator.adapter.IndicatorViewHolder
 import com.tapptitude.pageindicator.adapter.TappPageIndicatorAdapter
+import com.tapptitude.pageindicator.indicator.IndicatorSize
+import com.tapptitude.pageindicator.indicator.IndicatorSpacingDecoration
 import com.tapptitude.pageindicator.indicator.IndicatorStyle
+import com.tapptitude.pageindicator.util.DpValue
+import com.tapptitude.pageindicator.util.extensions.toPx
 
 class TappPageIndicator @JvmOverloads constructor(
     context: Context,
@@ -18,8 +27,7 @@ class TappPageIndicator @JvmOverloads constructor(
     private var orientation: Int = HORIZONTAL
 
     private val pageIndicatorAdapter by lazy { TappPageIndicatorAdapter() }
-    /** TBD:
-     *
+    /**
      * The viewHolders of this adapter will have a simple layout containing an ImageView
      * The items will be data classes describing how ImageView looks (background, corners, sizing etc.)
      * By default all viewHolders will appear unselected
@@ -30,12 +38,19 @@ class TappPageIndicator @JvmOverloads constructor(
      * Determines if the scrolling should circle back to top/bottom when using the [next]/[previous] methods
      */
     private var isInfinitelyScrollable: Boolean = false
+
+    /**
+     * [indicatorSpacing] represents the space between 2 indicators, set as ItemDecoration
+     */
+    @DpValue
+    @IntRange(from = 0)
+    private var indicatorSpacing: Int = 0
+    private var indicatorStyle: IndicatorStyle = defaultIndicatorStyle
+    private lateinit var pageIndicatorSizing: TappPageIndicatorSizing
     var currentPage: Int = 0
         private set
 
     init {
-        layoutManager = LinearLayoutManager(context, orientation, false)
-
         adapter = pageIndicatorAdapter
     }
 
@@ -43,35 +58,138 @@ class TappPageIndicator @JvmOverloads constructor(
      * Styling set through this method or [setIndicatorStyle] & [setIndicatorSizing] will override xml attributes accordingly
      */
     fun initPageIndicator(
-        indicatorStyle: IndicatorStyle,
-        pageIndicatorSizing: TappPageIndicatorSizing,
+        @IntRange(from = 1)
+        indicatorsCount: Int,
+        pageIndicatorSizing: TappPageIndicatorSizing = TappPageIndicatorSizing.FitAll(indicatorsCount),
+        indicatorStyle: IndicatorStyle = defaultIndicatorStyle,
+        @DpValue
+        @IntRange(from = 0)
+        indicatorSpacing: Int = 0,
         @Orientation
         orientation: Int = HORIZONTAL,
         isInfinitelyScrollable: Boolean = false
-    ) = Unit
+    ) {
+        setIndicatorStyle(indicatorStyle)
+        setIndicatorSizing(pageIndicatorSizing)
+        setIndicatorSpacing(indicatorSpacing)
+        setOrientation(orientation)
+        this.isInfinitelyScrollable = isInfinitelyScrollable
+        placeIndicators(indicatorsCount)
+    }
 
     /**
      * [setIndicatorStyle] & [setIndicatorSizing] will submit a new list tom [pageIndicatorAdapter] and force a layoutManager reset
      * in order to make sure all viewHolders were assigned the appropriate styling
      */
-    fun setIndicatorStyle(indicatorStyle: IndicatorStyle) = Unit
+    //TODO: Update UI
+    fun setIndicatorStyle(indicatorStyle: IndicatorStyle) {
+        this.indicatorStyle = indicatorStyle
+    }
 
-    fun setIndicatorSizing(pageIndicatorSizing: TappPageIndicatorSizing) = Unit
+    //TODO: Update UI
+    fun setIndicatorSizing(pageIndicatorSizing: TappPageIndicatorSizing) {
+        this.pageIndicatorSizing = pageIndicatorSizing
+    }
+
+    fun setIndicatorSpacing(
+        @DpValue
+        @IntRange(from = 0)
+        indicatorSpacing: Int
+    ) {
+        removeExistingSpacingDecoration()
+
+        this.indicatorSpacing = indicatorSpacing
+        addItemDecoration(IndicatorSpacingDecoration(indicatorSpacing.toPx(), orientation))
+    }
+
+    private fun removeExistingSpacingDecoration() {
+        if (itemDecorationCount > 0) {
+            (0..itemDecorationCount).forEach { decorationIndex ->
+                val decoration = getItemDecorationAt(decorationIndex)
+                if (decoration is IndicatorSpacingDecoration) {
+                    removeItemDecoration(decoration)
+                }
+            }
+        }
+    }
+
+    //TODO: Check if UI is updated accordingly
+    private fun setOrientation(@Orientation orientation: Int) {
+        this.orientation = orientation
+        layoutManager = LinearLayoutManager(context, orientation, false)
+    }
+
+    private fun placeIndicators(
+        @IntRange(from = 1) indicatorsCount: Int,
+        @IntRange(from = 0) selectedPosition: Int = 0
+    ) {
+        val indicatorsList = mutableListOf<IndicatorData>().apply {
+            (0..indicatorsCount).forEach { index ->
+                add(IndicatorData(index, indicatorStyle))
+            }
+        }
+        pageIndicatorAdapter.submitList(indicatorsList)
+        doOnLayout {
+            currentPage = selectedPosition
+            getViewAtPosition(selectedPosition)?.let { selectedIndicator ->
+                (getChildViewHolder(selectedIndicator) as? IndicatorViewHolder)?.setState(true)
+            }
+        }
+    }
 
     /**
      * [next] & [previous] methods are syntax sugar wrappers for [setCurrentlySelectedPage]
      * They change the current page by +/- 1
      */
-    fun next(smoothScroll: Boolean = true) = Unit
+    //TODO: Implement taking in consideration smoothScroll
+    fun next(smoothScroll: Boolean = true) {
+        if (currentPage < pageIndicatorAdapter.itemCount - 1) {
+            changeSelectedIndicator(currentPage + 1)
+        }
+    }
 
-    fun previous(smoothScroll: Boolean = true) = Unit
+    //TODO: Implement taking in consideration smoothScroll
+    fun previous(smoothScroll: Boolean = true) {
+        if (currentPage > 0) {
+            changeSelectedIndicator(currentPage - 1)
+        }
+    }
 
     /**
      * Using [getViewAtPosition] will change the previous page to unselected state and the current page to selected state
      *
      * Performs smooth scroll if necessary and adjusts the scrolling position of the RecyclerView
      */
-    fun setCurrentlySelectedPage(pageIndex: Int, smoothScroll: Boolean = true) = Unit
+    fun setCurrentlySelectedPage(pageIndex: Int, smoothScroll: Boolean = true) {
+        changeSelectedIndicator(pageIndex)
+    }
+
+    private fun changeSelectedIndicator(newSelectedPage: Int) {
+        updateIndicatorViewHolderState(currentPage, false)
+
+        currentPage = newSelectedPage
+
+        updateIndicatorViewHolderState(currentPage, true)
+    }
 
     private fun getViewAtPosition(position: Int): View? = layoutManager?.findViewByPosition(position)
+
+    private fun updateIndicatorViewHolderState(position: Int, isSelected: Boolean) {
+        getViewAtPosition(position)?.let { selectedIndicator ->
+            (getChildViewHolder(selectedIndicator) as? IndicatorViewHolder)?.setState(isSelected)
+        }
+    }
+
+    companion object {
+
+        private val defaultIndicatorStyle: IndicatorStyle by lazy { initDefaultIndicatorStyle() }
+
+        private fun initDefaultIndicatorStyle(): IndicatorStyle =
+            IndicatorStyle.ShapeIndicator(
+                8,
+                Color.LTGRAY,
+                Color.LTGRAY,
+                IndicatorSize(12, 12)
+            )
+    }
 }
