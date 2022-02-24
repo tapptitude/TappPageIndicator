@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="TappPageIndicator">
+        <!--
+                These are the equivalent of LinearLayout.HORIZONTAL = 0 or LinearLayout.VERTICAL = 1
+            which are also used for RecyclerView
+            TODO: When extracting attrs, map pageIndicatorOrientation enum values
+                to @RecyclerView.Orientation equivalents
+        -->
+        <attr name="pageIndicatorOrientation" format="enum">
+            <enum name="horizontal" value="0" />
+            <enum name="vertical" value="1" />
+        </attr>
+
+        <attr name="indicatorSizingMethod" format="enum">
+            <enum name="fitAll" value="0" />
+            <enum name="fixedNumberOfVisibleIndicators" value="1" />
+        </attr>
+
+        <!--
+            indicatorsCount will be interpreted Depending on the value of indicatorSizingMethod:
+                fitAll -> totalIndicatorsCount (The number of visible indicators is equal to the total number of pages)
+                fixedNumberOfVisibleIndicators -> visibleIndicatorsCount (The number of visible indicators is less than the total number of pages)
+        -->
+        <attr name="indicatorsCount" format="integer" />
+        <attr name="isInfiniteScrollEnabled" format="boolean" />
+
+        <!--
+                Drawable configuration takes priority over color configuration
+
+                This means that if selectedDrawable & unselectedDrawable are set, the color and corner radius
+            values are ignored
+
+                selectedDrawable is mandatory
+                If unselectedDrawable is unavailable, then selectedDrawable is used and unselectedIndicatorAlpha is applied
+                If unselectedIndicatorAlpha is also unavailable, use a default value of 0.75f (TBD) and
+            display a verbose warning in console.
+        -->
+        <attr name="selectedDrawable" format="reference" />
+        <attr name="unselectedDrawable" format="reference" />
+
+        <attr name="selectedColor" format="reference" />
+        <attr name="unselectedColor" format="reference" />
+        <attr name="indicatorCornerRadius" format="dimension" />
+
+        <attr name="unselectedIndicatorAlpha" format="float" />
+    </declare-styleable>
+</resources>
