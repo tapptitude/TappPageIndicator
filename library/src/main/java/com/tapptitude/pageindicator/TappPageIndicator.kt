@@ -146,14 +146,14 @@ class TappPageIndicator @JvmOverloads constructor(
      * [next] & [previous] methods are syntax sugar wrappers for [setCurrentlySelectedPage]
      * They change the current page by +/- 1
      */
-    //TODO: Implement taking in consideration smoothScroll
+    //TODO: Implement taking in consideration smoothScroll & isInfinitelyScrollable
     fun next(smoothScroll: Boolean = true) {
         if (currentPage < pageIndicatorAdapter.itemCount - 1) {
             changeSelectedIndicator(currentPage + 1)
         }
     }
 
-    //TODO: Implement taking in consideration smoothScroll
+    //TODO: Implement taking in consideration smoothScroll & isInfinitelyScrollable
     fun previous(smoothScroll: Boolean = true) {
         if (currentPage > 0) {
             changeSelectedIndicator(currentPage - 1)
@@ -188,9 +188,11 @@ class TappPageIndicator @JvmOverloads constructor(
     companion object {
 
         private val defaultIndicatorStyle: IndicatorStyle by lazy { initDefaultIndicatorStyle() }
+
         private const val DEFAULT_INDICATOR_CORNER_RADIUS: Int = 8
         private const val DEFAULT_INDICATOR_SIZE: Int = 12
 
+        // TODO: Revise default shape after implementing custom ImageView
         private fun initDefaultIndicatorStyle(): IndicatorStyle =
             IndicatorStyle.ShapeIndicator(
                 DEFAULT_INDICATOR_CORNER_RADIUS,
