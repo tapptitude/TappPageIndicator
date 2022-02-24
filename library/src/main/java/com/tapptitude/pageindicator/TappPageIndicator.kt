@@ -24,7 +24,7 @@ class TappPageIndicator @JvmOverloads constructor(
 ) : RecyclerView(context, attrs, defStyleAttr) {
 
     @Orientation
-    var orientation: Int = HORIZONTAL
+    var pageIndicatorOrientation: Int = HORIZONTAL
         private set
 
     private val pageIndicatorAdapter by lazy { TappPageIndicatorAdapter() }
@@ -68,12 +68,12 @@ class TappPageIndicator @JvmOverloads constructor(
         @IntRange(from = 0)
         indicatorSpacing: Int = 0,
         @Orientation
-        orientation: Int = HORIZONTAL,
+        pageIndicatorOrientation: Int = HORIZONTAL,
         isInfinitelyScrollable: Boolean = false
     ) {
         setIndicatorStyle(indicatorStyle)
         setIndicatorSizing(pageIndicatorSizing)
-        setOrientation(orientation)
+        setOrientation(pageIndicatorOrientation)
         setIndicatorSpacing(indicatorSpacing)
         this.isInfinitelyScrollable = isInfinitelyScrollable
         placeIndicators(indicatorsCount)
@@ -101,7 +101,7 @@ class TappPageIndicator @JvmOverloads constructor(
         removeExistingSpacingDecoration()
 
         this.indicatorSpacing = indicatorSpacing
-        addItemDecoration(IndicatorSpacingDecoration(indicatorSpacing.toPx(), orientation))
+        addItemDecoration(IndicatorSpacingDecoration(indicatorSpacing.toPx(), pageIndicatorOrientation))
     }
 
     private fun removeExistingSpacingDecoration() {
@@ -116,9 +116,9 @@ class TappPageIndicator @JvmOverloads constructor(
     }
 
     //TODO: Check if UI is updated accordingly
-    fun setOrientation(@Orientation orientation: Int) {
-        this.orientation = orientation
-        layoutManager = LinearLayoutManager(context, orientation, false)
+    fun setOrientation(@Orientation pageIndicatorOrientation: Int) {
+        this.pageIndicatorOrientation = pageIndicatorOrientation
+        layoutManager = LinearLayoutManager(context, pageIndicatorOrientation, false)
         doOnLayout {
             updateIndicatorViewHolderState(currentPage, true)
         }

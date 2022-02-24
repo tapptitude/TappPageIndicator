@@ -27,7 +27,7 @@ class MainActivity : AppCompatActivity() {
 
         // TODO: The goal in the end is to be able to set any property without manually having to set any dependant ones from outside library code
         binding.rotateIndicatorBtn.setOnClickListener {
-            val currentOrientation = binding.pageIndicator.orientation
+            val currentOrientation = binding.pageIndicator.pageIndicatorOrientation
 
             if (currentOrientation == HORIZONTAL) {
                 binding.pageIndicator.setOrientation(VERTICAL)

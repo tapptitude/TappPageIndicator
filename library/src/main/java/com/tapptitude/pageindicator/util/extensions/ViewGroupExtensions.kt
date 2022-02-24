@@ -1,4 +1,4 @@
-package com.tapptitude.pageindicator.util
+package com.tapptitude.pageindicator.util.extensions
 
 import android.view.LayoutInflater
 import android.view.ViewGroup

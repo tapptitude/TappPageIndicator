@@ -5,7 +5,7 @@ import android.widget.ImageView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.tapptitude.pageindicator.R
-import com.tapptitude.pageindicator.util.layoutInflater
+import com.tapptitude.pageindicator.util.extensions.layoutInflater
 
 class TappPageIndicatorAdapter : ListAdapter<IndicatorData, IndicatorViewHolder>(indicatorsDiffUtil) {
 
